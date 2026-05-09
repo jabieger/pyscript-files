@@ -18,3 +18,6 @@ def links_hinzufuegen_zu(target):  # target ist die id des Ziel-divs
             target="_blank"
         )
     )
+
+def check():
+    return "Einbindung erfolgreich: sources.py"
