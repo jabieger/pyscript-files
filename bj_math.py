@@ -824,6 +824,9 @@ class Gerade:
 
     def diagnose_gerade(self, soll):
 
+        if self == soll:
+            return "✅ Die Gerade ist korrekt."
+
         meldungen = []
     
         # =====================================================
@@ -918,7 +921,7 @@ class Gerade:
 
         if len(meldungen) == 0:
     
-            return "✅ Die Gerade ist korrekt."
+            return "✅ "
     
         out = "❌ "
         for meldung in meldungen:
