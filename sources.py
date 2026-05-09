@@ -1,7 +1,7 @@
 from pyscript.web import page, a
 
 def links_hinzufuegen_zu(target):  # target ist die id des Ziel-divs
-    div = page[target]
+    div = page[target][0]
 
     div.append(
         a(
