@@ -835,11 +835,10 @@ class Gerade:
     
         def check_steigung():
     
-            if not self.m.isEqualTo(soll.m):
-    
-                meldungen.append(
-                    "Die Steigung stimmt nicht."
-                )
+            if self.m == soll.m:
+                meldungen.append("Die Steigung stimmt.")
+            else:
+                meldungen.append("Die Steigung stimmt nicht.")
     
         def check_y_achsenabschnitt():
     
