@@ -825,102 +825,43 @@ class Gerade:
     def diagnose_gerade(self, soll):
 
         if self == soll:
-            return "✅ Die Gerade ist korrekt richtig."
+            return "✅ Die Gerade ist korrekt."
 
         meldungen = []
     
-        # =====================================================
-        # Prüffunktionen
-        # =====================================================
+        # Steigung prüfen ---------------------------------------------------------------
+        if self.m == soll.m:
+            meldungen.append("Die Steigung stimmt.")
+        else:
+            meldungen.append("Die Steigung stimmt nicht.")
     
-        def check_steigung():
+        # Vorzeichen in Steigung prüfen ---------------------------------------------------------------
+        neg_m = QZahl(-soll.m.zaehler, soll.m.nenner)
+        if self.m.isEqualTo(neg_m):
+            meldungen.append("Die Steigung hat das falsche Vorzeichen.")
     
-            if self.m == soll.m:
-                meldungen.append("Die Steigung stimmt.")
-            else:
-                meldungen.append("Die Steigung stimmt nicht.")
+        # Kehrwertfehler prüfen ---------------------------------------------------------------
+        if soll.m.zaehler == 0:
+            return
+        if (self.m.zaehler == soll.m.nenner and self.m.nenner == soll.m.zaehler):
+            meldungen.append("Die Steigung wurde vermutlich vertauscht (Δx und Δy verwechselt).")
     
-        def check_y_achsenabschnitt():
-    
-            if not self.c.isEqualTo(soll.c):
-    
-                meldungen.append(
-                    "Der y-Achsenabschnitt stimmt nicht."
-                )
-    
-        def check_vorzeichenfehler():
-    
-            neg_m = QZahl(
-                -soll.m.zaehler,
-                soll.m.nenner
-            )
-    
-            if self.m.isEqualTo(neg_m):
-    
-                meldungen.append(
-                    "Die Steigung hat das falsche Vorzeichen."
-                )
-    
-        def check_kehrwertfehler():
-    
-            if soll.m.zaehler == 0:
-                return
-    
-            if (
-                self.m.zaehler == soll.m.nenner
-                and self.m.nenner == soll.m.zaehler
-            ):
-    
-                meldungen.append(
-                    "Die Steigung wurde vermutlich vertauscht "
-                    "(Δx und Δy verwechselt)."
-                )
-    
-        def check_steigung_vergessen():
-    
-            if (
-                self.m.is_zero()
-                and not soll.m.is_zero()
-            ):
-    
-                meldungen.append(
-                    "Die Steigung fehlt."
-                )
-    
-        def check_y_abschnitt_vergessen():
-    
-            if (
-                self.c.is_zero()
-                and not soll.c.is_zero()
-            ):
-    
-                meldungen.append(
-                    "Der y-Achsenabschnitt fehlt."
-                )
-    
-        # =====================================================
-        # Prüfungen ausführen
-        # =====================================================
-    
-        check_steigung()
-    
-        check_y_achsenabschnitt()
-    
-        check_vorzeichenfehler()
-    
-        check_kehrwertfehler()
-    
-        check_steigung_vergessen()
-    
-        check_y_abschnitt_vergessen()
-    
-        # =====================================================
-        # Ergebnis
-        # =====================================================
+        # Steigung vergessen prüfen ---------------------------------------------------------------
+        if (self.m.is_zero() and not soll.m.is_zero()):
+            meldungen.append("Die Steigung fehlt.")
 
-        if len(meldungen) == 0:
+        # y-Achsenabschnitt prüfen ---------------------------------------------------------------
+        if self.c == soll.c:
+            meldungen.append("Der y-Achsenabschnitt stimmt.")
+        else:
+            meldungen.append("Der y-Achsenabschnitt stimmt nicht.")
     
-            return "✅ "
+        # y-Achsenabschnitt vergessen prüfen ---------------------------------------------------------------
+        if (self.c.is_zero() and not soll.c.is_zero()):
+            meldungen.append("Der y-Achsenabschnitt fehlt.")
+                
+        # ====================================================================================
+        # Ergebnis
     
         out = "❌ "
         for meldung in meldungen:
