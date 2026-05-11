@@ -1119,31 +1119,57 @@ class EditableFormula:
   def get_string(self):
     return self.form_string.replace("¢", "")
 
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+import matplotlib.pyplot as plt
+
+
 class Rocket:
 
-    def __init__(self, cs, image_path, x=0, y=0, zoom=0.12):
+    def __init__(
+        self,
+        cs,
+        image_path,
+        x=0,
+        y=0,
+        zoom=0.12
+    ):
 
         self.cs = cs
 
         self.x = x
         self.y = y
 
-        # Bild laden
+        self.zoom = zoom
+
+        # Raketenbild laden
         self.image = plt.imread(image_path)
 
+        # AnnotationBox-Referenz
+        self.ab = None
+
+        # erste Rakete erzeugen
+        self.create_annotationbox()
+
+    def create_annotationbox(self):
+
+        # altes Objekt entfernen
+        if self.ab is not None:
+            self.ab.remove()
+
         # Bildobjekt erzeugen
-        self.offset_image = OffsetImage(
+        offset_image = OffsetImage(
             self.image,
-            zoom=zoom
+            zoom=self.zoom
         )
 
-        # Rakete in Koordinatensystem einfügen
+        # neue AnnotationBox erzeugen
         self.ab = AnnotationBbox(
-            self.offset_image,
+            offset_image,
             (self.x, self.y),
             frameon=False
         )
 
+        # ins Koordinatensystem einfügen
         self.cs.ax.add_artist(self.ab)
 
     def move_to(self, x, y):
@@ -1151,8 +1177,8 @@ class Rocket:
         self.x = x
         self.y = y
 
-        # Position aktualisieren
-        self.ab.xy = (x, y)
+        # AnnotationBox komplett neu erzeugen
+        self.create_annotationbox()
 
     def move_by(self, dx, dy):
 
