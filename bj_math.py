@@ -6,6 +6,10 @@ import random as rand
 
 from dataclasses import dataclass, field
 
+# Animation in matplotlib
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+from matplotlib.animation import FuncAnimation
+
 def create_formula_fig(string):
     # Länge bestimmen
   length = len(string) - string.count("frac")*10
@@ -1114,6 +1118,48 @@ class EditableFormula:
 
   def get_string(self):
     return self.form_string.replace("¢", "")
+
+class Rocket:
+
+    def __init__(self, cs, image_path, x=0, y=0, zoom=0.12):
+
+        self.cs = cs
+
+        self.x = x
+        self.y = y
+
+        # Bild laden
+        self.image = plt.imread(image_path)
+
+        # Bildobjekt erzeugen
+        self.offset_image = OffsetImage(
+            self.image,
+            zoom=zoom
+        )
+
+        # Rakete in Koordinatensystem einfügen
+        self.ab = AnnotationBbox(
+            self.offset_image,
+            (self.x, self.y),
+            frameon=False
+        )
+
+        self.cs.ax.add_artist(self.ab)
+
+    def move_to(self, x, y):
+
+        self.x = x
+        self.y = y
+
+        # Position aktualisieren
+        self.ab.xy = (x, y)
+
+    def move_by(self, dx, dy):
+
+        self.move_to(
+            self.x + dx,
+            self.y + dy
+        )
 
 #cs = CoordSys()
 # p = Point(QZahl(2), QZahl(1, 2))
