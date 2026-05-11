@@ -1121,7 +1121,7 @@ class EditableFormula:
 
 class Rocket:
 
-    def __init__(self, cs, image_path, x=0, y=0, zoom=0.02):
+    def __init__(self, cs, image_path, x=0, y=0, zoom=0.12):
 
         self.cs = cs
 
